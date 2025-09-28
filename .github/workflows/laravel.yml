@@ -1,0 +1,18 @@
+name: Laravel CI
+
+on: [push, pull_request]
+
+jobs:
+  laravel-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+      - run: cp .env.example .env
+      - run: composer install --prefer-dist
+      - run: php artisan key:generate
+      - run: php artisan migrate --env=testing
+      - run: php artisan test
